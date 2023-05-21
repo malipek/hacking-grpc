@@ -9,12 +9,19 @@ certfile = sys.argv[1]
 extension = os.path.splitext(certfile)[1]
 ca_construct = '{}.0'
 cert = open(certfile, 'rb')
-if extension == '.pem':
+cert_content = cert.read()
+cert.close()
+if extension == '.pem' or extension == '.crt':
     # PEM format - ZAP uses this
-    ca_obj = crypto.load_certificate(crypto.FILETYPE_PEM, cert.read())
+    ca_obj = crypto.load_certificate(crypto.FILETYPE_PEM, cert_content)
 elif extension == '.der':
     # DER format - Burp uses this
-    ca_obj = crypto.load_certificate(crypto.FILETYPE_ASN1, cert.read())
+    ca_obj = crypto.load_certificate(crypto.FILETYPE_ASN1, cert_content)
+    pem_filename = os.path.splitext(certfile)[0]+'.pem'
+    pem_file = open(pem_filename, 'wb')
+    pem_file.write(crypto.dump_certificate(crypto.FILETYPE_PEM, ca_obj))
+    pem_file.close()
+    certfile = pem_filename
 else:
     print('Unknown certificate format')
     sys.exit(1)
