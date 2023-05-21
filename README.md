@@ -1,4 +1,4 @@
-# Hacking gRPC
+# Hacking gRPC on Android
 
 * Run adb server
 
@@ -35,6 +35,8 @@ adb shell settings put global http_proxy 127.0.0.1:28888
 ```
 
 For Android Studio Emulator loopback (127.0.0.1) doesn't work. Use your network card IP.
+
+* Start main activity
 
 * Watch proxy for incoming requests from application. For Burp, remember to disable Intercept, so the traffic is not paused after each request and reply.
 
